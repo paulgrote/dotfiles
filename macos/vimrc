@@ -1,0 +1,40 @@
+" Enable filetype plugin
+filetype plugin indent on
+
+" Enable syntax highlighting
+syntax enable
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Enable line numbers
+set number
+
+" Start NERDTree automatically when vim launches
+autocmd VimEnter * NERDTree
+
+" Vimscripts that return the current branch name or empty string if not in
+" git repo
+
+function! GitBranch()
+	return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+	let l:branchname = GitBranch()
+	return strlen(l:branchname) > 0?' '.l:branchname.' ':''
+endfunction
+
+" Left-aligned status line information
+set statusline=
+set statusline+=%{StatuslineGit()}
+set statusline+=%F\ 	" Full file path
+set statusline+=%m	" Is file modified?
+set statusline+=%r	" Is file read-only?
+set statusline+=%y	" File type
+
+" Right-aligned status line information
+set statusline+=%=			" Right-align
+set statusline+=Line:\ %l/%L,\ 		" Line number / Total lines
+set statusline+=Col:\ %c,\ 		" Column number
+set statusline+=Pos:\ %p		" Percentage through document
